@@ -29,6 +29,7 @@ let main = async function () {
 			return line.trim()
 		})
 		result = result.filter((v, i, a) => a.indexOf(v) === i)
+		result = result.join('\n')
 		
 		fs.writeFileSync(path.join(dirname, filenameNoExt + '.txt'), result, 'utf8')
   }
