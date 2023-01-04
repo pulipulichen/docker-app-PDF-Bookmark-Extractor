@@ -19,8 +19,11 @@ let main = async function () {
 		let filename = path.basename(file)
 		let dirname = path.dirname(filename)
 		let tempFilename = Math.floor(Math.random() * 100000) + '.pdf'
-
+		
 		let tempFilePath = path.resolve(dirname, tempFilename)
+		console.log(tempFilePath)
+		console.log(path.resolve(dirname, filename.slice(0, -4) + '.txt'))
+
 		fs.renameSync(file, tempFilePath)
 
 
