@@ -24,6 +24,7 @@ let main = async function () {
 		let cmd = `pdftk "${file}" dump_data_utf8 | grep '^Bookmark'`
 		let result = await ShellExec(cmd)
 		let titles = []
+		let titleData = []
 		result.split('BookmarkBegin').forEach((part, i) => {
 			if (i === 0) {
 				return false
@@ -52,8 +53,37 @@ let main = async function () {
 				titlePrefix = titlePrefix + '-'
 			}
 
-			titles.push(`${titlePrefix} ${title} (${page})`)
+			// titles.push(`${titlePrefix} ${title} (${page})`)
+			titleData.push({
+				title,
+				level,
+				page,
+				titlePrefix
+			})
 		})
+
+		let cmdPageNumber = `pdftk "${file}" dump_data_utf8 | grep 'NumberOfPages'`
+		let numberOfPages = await ShellExec(cmdPageNumber)
+		numberOfPages = numberOfPages.slice(numberOfPages.indexOf(':')+1).trim()
+		numberOfPages = Number(numberOfPages)
+
+		for (let i = 0; i < titleData.length; i++) {
+			let nextPage
+			if (i < titleData.length - 1) {
+				nextPage = titleData[i+1].page
+			}
+			else {
+				nextPage = numberOfPages + 1
+			}
+
+			titleData[i].pages = (nextPage - titleData[i].page)
+		}
+
+		for (let i = 0; i < titleData.length; i++) {
+			let {titlePrefix, title, pages} = titleData[i] 
+			titles.push(`${titlePrefix} ${title} (${pages})`)
+		}
+
 		titles = titles.join('\n').trim()
 		
 		fs.writeFileSync(path.join(dirname, filenameNoExt + '.txt'), titles, 'utf8')
