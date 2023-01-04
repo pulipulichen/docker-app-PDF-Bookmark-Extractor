@@ -33,11 +33,11 @@ let main = async function () {
 			title = title.slice(title.indexOf(':')).trim()
 
 			let level = lines[1]
-			level = level.slice(title.indexOf(':')).trim()
+			level = level.slice(level.indexOf(':')).trim()
 			level = Number(level)
 
 			let page = lines[2]
-			page = page.slice(title.indexOf(':')).trim()
+			page = page.slice(level.indexOf(':')).trim()
 			page = Number(page)
 
 			let titlePrefix = ""
