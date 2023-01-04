@@ -40,7 +40,7 @@ let main = async function () {
 			level = Number(level)
 
 			let page = lines[2]
-			page = page.slice(level.indexOf(':')).trim()
+			page = page.slice(page.indexOf(':')).trim()
 			page = Number(page)
 
 			let titlePrefix = ""
