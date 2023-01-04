@@ -35,6 +35,10 @@ let main = async function () {
 			let title = lines[0]
 			title = title.slice(title.indexOf(':')+1).trim()
 
+			while (title.indexOf('  ') > -1) {
+				title = title.replace(/  /g, ' ')
+			}
+
 			let level = lines[1]
 			level = level.slice(level.indexOf(':')+1).trim()
 			level = Number(level)
