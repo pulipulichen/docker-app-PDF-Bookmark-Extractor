@@ -17,7 +17,7 @@ let main = async function () {
     }
     
 		let filename = path.basename(file)
-		let dirname = path.dirname(filename)
+		let dirname = path.dirname(file)
 		let tempFilename = Math.floor(Math.random() * 100000) + '.pdf'
 		
 		let tempFilePath = path.resolve(dirname, tempFilename)
