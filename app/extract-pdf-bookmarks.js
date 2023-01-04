@@ -47,6 +47,7 @@ let main = async function () {
 			else if (lastTitle === title) {
 				return false
 			}
+			lastTitle = title
 
 			let level = lines[1]
 			level = level.slice(level.indexOf(':')+1).trim()
