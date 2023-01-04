@@ -20,24 +20,36 @@ let main = async function () {
       filenameNoExt = filenameNoExt.slice(0, -4)
     }
 
-		let result = await ShellExec(`qpdf --json "${file}" | jq '.objects' | grep -Po 'Title": \\K.*'`)
-		result = result.split('\n').map(line => {
-			line = line.trim()
-			if (line.startsWith('"') && line.endsWith('"')) {
-				line = line.slice(1, -1)
+		// let cmd = `qpdf --json "${file}" | jq '.objects' | grep -Po 'Title": \\K.*'`
+		let cmd = `pdftk "${file}" dump_data_utf8 | grep '^Bookmark'`
+		let result = await ShellExec(cmd)
+		let titles = []
+		result.split('BookmarkBegin').foreach(part => {
+			part = part.trim()
+
+			let lines = part.split('\n')
+
+			let title = lines[0]
+			title = title.slice(title.indexOf(':')).trim()
+
+			let level = lines[1]
+			level = level.slice(title.indexOf(':')).trim()
+			level = Number(level)
+
+			let page = lines[2]
+			page = page.slice(title.indexOf(':')).trim()
+			page = Number(page)
+
+			let titlePrefix = ""
+			for (let i = 1; i < level.length; i++) {
+				titlePrefix = titlePrefix + '-'
 			}
 
-			while (line.indexOf('  ') > -1) {
-				line = line.replace(/  /g, ' ')
-			}
-
-			return line.trim()
+			titles.push(`${titlePrefix} ${title} (${page})`)
 		})
-		result = result.filter(i => i !== '')
-		result = result.filter((v, i, a) => a.indexOf(v) === i)
-		result = result.join('\n').trim()
+		titles = titles.join('\n').trim()
 		
-		fs.writeFileSync(path.join(dirname, filenameNoExt + '.txt'), result, 'utf8')
+		fs.writeFileSync(path.join(dirname, filenameNoExt + '.txt'), titles, 'utf8')
   }
 }
 
