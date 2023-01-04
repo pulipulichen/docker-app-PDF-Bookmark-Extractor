@@ -26,10 +26,15 @@ let main = async function () {
 			if (line.startsWith('"') && line.endsWith('"')) {
 				line = line.slice(1, -1)
 			}
+
+			while (line.indexOf('  ') > -1) {
+				line = line.replace(/  /g, ' ')
+			}
+
 			return line.trim()
 		})
 		result = result.filter((v, i, a) => a.indexOf(v) === i)
-		result = result.join('\n')
+		result = result.join('\n').trim()
 		
 		fs.writeFileSync(path.join(dirname, filenameNoExt + '.txt'), result, 'utf8')
   }
