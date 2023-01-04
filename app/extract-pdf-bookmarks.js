@@ -25,6 +25,7 @@ let main = async function () {
 		let result = await ShellExec(cmd)
 		let titles = []
 		let titleData = []
+		let lastTitle
 		result.split('BookmarkBegin').forEach((part, i) => {
 			if (i === 0) {
 				return false
@@ -38,6 +39,13 @@ let main = async function () {
 
 			while (title.indexOf('  ') > -1) {
 				title = title.replace(/  /g, ' ')
+			}
+
+			if (!lastTitle) {
+				lastTitle = title
+			}
+			else if (lastTitle === title) {
+				return false
 			}
 
 			let level = lines[1]
@@ -73,7 +81,7 @@ let main = async function () {
 				nextPage = titleData[i+1].page
 			}
 			else {
-				nextPage = numberOfPages + 1
+				nextPage = numberOfPages
 			}
 
 			titleData[i].pages = (nextPage - titleData[i].page)
