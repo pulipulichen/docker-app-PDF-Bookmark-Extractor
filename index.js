@@ -17,15 +17,17 @@ let main = async function () {
     }
     
 		let filename = path.basename(file)
+		let dirname = path.dirname(filename)
 		let tempFilename = Math.floor(Math.random() * 100000) + '.pdf'
-		let tempFilePath = `/input/` + tempFilename
+
+		let tempFilePath = path.resolve(dirname, tempFilename)
 		fs.renameSync(file, tempFilePath)
 
 
     SetDockerComposeYML(tempFilePath)
     await ShellSpawn('docker-compose up')
 		fs.renameSync(tempFilePath, file)
-		fs.renameSync(`/input/` + tempFilename.slice(0, -4) + '.txt', `/input/` + filename.slice(0, -4) + '.txt')
+		fs.renameSync(path.resolve(dirname, tempFilename.slice(0, -4) + '.txt'), path.resolve(dirname, filename.slice(0, -4) + '.txt'))
   }
 }
 
