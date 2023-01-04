@@ -20,7 +20,7 @@ let main = async function () {
       filenameNoExt = filenameNoExt.slice(0, -4)
     }
 
-		let result = await ShellExec(`qpdf --json "${file}" | jq '.objects' | grep -Po 'Title": \K.*'`)
+		let result = await ShellExec(`qpdf --json "${file}" | jq '.objects' | grep -Po 'Title": \\K.*'`)
 		result = result.split('\n').map(line => {
 			line = line.trim()
 			if (line.startsWith('"') && line.endsWith('"')) {
