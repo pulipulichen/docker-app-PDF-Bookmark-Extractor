@@ -24,7 +24,7 @@ let main = async function () {
 		let cmd = `pdftk "${file}" dump_data_utf8 | grep '^Bookmark'`
 		let result = await ShellExec(cmd)
 		let titles = []
-		result.split('BookmarkBegin').foreach(part => {
+		result.split('BookmarkBegin').forEach(part => {
 			part = part.trim()
 
 			let lines = part.split('\n')
