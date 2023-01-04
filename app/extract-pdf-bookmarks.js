@@ -33,6 +33,7 @@ let main = async function () {
 
 			return line.trim()
 		})
+		result = result.filter(i => i !== '')
 		result = result.filter((v, i, a) => a.indexOf(v) === i)
 		result = result.join('\n').trim()
 		
