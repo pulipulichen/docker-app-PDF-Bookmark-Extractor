@@ -61,6 +61,9 @@ let main = async function () {
 			for (let i = 1; i < level.length; i++) {
 				titlePrefix = titlePrefix + '-'
 			}
+			if (level > 1) {
+				titlePrefix = titlePrefix + ' '
+			}
 
 			// titles.push(`${titlePrefix} ${title} (${page})`)
 			titleData.push({
@@ -90,7 +93,7 @@ let main = async function () {
 
 		for (let i = 0; i < titleData.length; i++) {
 			let {titlePrefix, title, pages} = titleData[i] 
-			titles.push(`${titlePrefix} ${title} (${pages})`)
+			titles.push(`${titlePrefix}${title} (${pages})`)
 		}
 
 		titles = titles.join('\n').trim()
