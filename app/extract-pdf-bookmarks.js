@@ -20,10 +20,16 @@ let main = async function () {
       filenameNoExt = filenameNoExt.slice(0, -4)
     }
 
-		// let cmd = `qpdf --json "${file}" | jq '.objects' | grep -Po 'Title": \\K.*'`
-		// let cmd = `pdftk "${file}" dump_data_utf8 | grep '^Bookmark'`
-		let cmd = `pdftk "${file}" dump_data | grep '^Bookmark'`
-		let result = await ShellExec(cmd)
+		let result
+		let cmd = `pdftk "${file}" dump_data_utf8 | grep '^Bookmark'`
+		try {
+			result = await ShellExec(cmd)
+		}
+		catch (e) {
+			cmd = `pdftk "${file}" dump_data | grep '^Bookmark'`
+			result = await ShellExec(cmd)
+		}
+
 		let titles = []
 		let titleData = []
 		let lastTitle
@@ -76,8 +82,16 @@ let main = async function () {
 		})
 
 		// let cmdPageNumber = `pdftk "${file}" dump_data_utf8 | grep 'NumberOfPages'`
-		let cmdPageNumber = `pdftk "${file}" dump_data | grep 'NumberOfPages'`
-		let numberOfPages = await ShellExec(cmdPageNumber)
+		let cmdPageNumber = `pdftk "${file}" dump_data_utf8 | grep 'NumberOfPages'`
+		let numberOfPages
+		try {
+			numberOfPages = await ShellExec(cmdPageNumber)
+		}
+		catch (e) {
+			cmdPageNumber = `pdftk "${file}" dump_data | grep 'NumberOfPages'`
+			numberOfPages = await ShellExec(cmdPageNumber)
+		}
+
 		numberOfPages = numberOfPages.slice(numberOfPages.indexOf(':')+1).trim()
 		numberOfPages = Number(numberOfPages)
 
